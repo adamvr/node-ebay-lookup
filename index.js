@@ -49,6 +49,7 @@ var countryId = [
   {countryCode: 'SG', globalId: 'EBAY-SG'},
   {countryCode: 'US', globalId: 'EBAY-US'}
 ];
+var defaultCountry = 'EBAY-US';
 Ebay.prototype.country = function (country) {
   // Lookup matching country
   var results = _.where(countryId, {countryCode: country});
