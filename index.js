@@ -11,8 +11,8 @@ var request = require('superagent')
  */
 var endpoint = 'http://svcs.ebay.com/services/search/FindingService/v1';
 
-module.exports = function (kw) {
-  return new Ebay(kw);
+module.exports = function (itemId) {
+  return new Ebay(itemId);
 };
 
 var Ebay = function (itemId) {
