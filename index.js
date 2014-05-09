@@ -86,6 +86,10 @@ Ebay.prototype.network = function (network) {
   return this;
 };
 
+Ebay.prototype.type = function (type) {
+  return this.listingType = type, this;
+};
+
 Ebay.prototype.done = function (cb) {
   return request
     .get(endpoint)
