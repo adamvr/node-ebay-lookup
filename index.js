@@ -103,6 +103,8 @@ Ebay.prototype.done = function (cb) {
     .query({keywords: this.keywords})
     .query({'affiliate.trackingId': this.trackingId})
     .query({'affiliate.networkId': this.networkId || defaultNetwork})
+    .query({'itemFilter(0).name': 'ListingType'})
+    .query({'itemFilter(0).value(0)': this.listingType})
     .end(function (err, res) {
       if (err) return cb(err);
 
