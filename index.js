@@ -86,8 +86,22 @@ Ebay.prototype.network = function (network) {
   return this;
 };
 
+var listing = [
+  { name: 'auction', id: 'Auction' },
+  { name: 'buy it now', id: 'AuctionWithBIN' },
+  { name: 'classified', id: 'Classified' },
+  { name: 'fixed', id: 'FixedPrice' },
+  { name: 'all', id: 'All' }
+];
+var defaultListing = 'All'
 Ebay.prototype.type = function (type) {
-  return this.listingType = type, this;
+  var results = _.where(listing, {name: type.toLowerCase()});
+
+  // Set listing type
+  this.listingType = results.length ? results[0].id : null;
+
+  // Return this for chaining
+  return this;
 };
 
 Ebay.prototype.done = function (cb) {
@@ -104,7 +118,7 @@ Ebay.prototype.done = function (cb) {
     .query({'affiliate.trackingId': this.trackingId})
     .query({'affiliate.networkId': this.networkId || defaultNetwork})
     .query({'itemFilter(0).name': 'ListingType'})
-    .query({'itemFilter(0).value(0)': this.listingType})
+    .query({'itemFilter(0).value(0)': this.listingType || defaultListing})
     .end(function (err, res) {
       if (err) return cb(err);
 
