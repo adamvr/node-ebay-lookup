@@ -4,6 +4,8 @@
 var request = require('superagent')
   , _ = require('underscore')
   , path = require('JSONPath').eval
+  , accounting = require('accounting')
+  , currency = require('currency-symbol-map')
   , parse = require('xml2js').parseString;
 
 /**
@@ -130,7 +132,7 @@ Ebay.prototype.done = function (cb) {
         if (err = parseErr(p)) return cb(err);
 
         // Return result
-        return cb(null, p);
+        return cb(null, parseResults(p, extractions));
       });
     });
 };
@@ -138,4 +140,55 @@ Ebay.prototype.done = function (cb) {
 var parseErr = function (obj) {
   var result = path(obj, '$..error..message[0]');
   return result.length ? new Error(result[0]) : null;
+};
+
+var first = function (obj, query) {
+  var result = path(obj, query);
+  return result.length ? result[0] : null;
+};
+
+var formatPrice = function (obj) {
+  var amount = obj._
+    , code = obj.$ && obj.$.currencyId;
+
+  if (!amount || !currency) return null;
+
+  return accounting.formatMoney(amount, currency(code));
+};
+
+var extractions = [
+  { name: 'id', query: '$..itemId[0]' },
+  { name: 'name', query: '$..title[0]' },
+  { name: 'url', query: '$..viewItemURL[0]' },
+  { name: 'offerPrice',
+    query: '$..sellingStatus..currentPrice[0]',
+    transform: formatPrice
+  },
+  { name: 'listPrice',
+    query: '$..discountPriceInfo..originalRetailPrice[0]',
+    transform: formatPrice
+  }
+];
+
+var parseResults = function (obj, extractions) {
+  var that = this;
+
+  var res = _
+    .chain(extractions)
+    .map(function (x) {
+      var key = x.name
+        , val = first(obj, x.query);
+
+      // Transform value if we have a transform available
+      if (x.transform && val !== null) val = x.transform.call(that, val);
+
+      return [key, val];
+    })
+    .filter(function (x) {
+      return x[1] !== null;
+    })
+    .object()
+    .value();
+
+  return _.keys(res).length ? res : null;
 };
