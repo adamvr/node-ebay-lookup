@@ -101,7 +101,7 @@ Ebay.prototype.done = function (cb) {
     .query({'REST-PAYLOAD': ''}) // Why, ebay? Why?
     .query({'paginationInput.entriesPerPage': 1})
     .query({keywords: this.keywords})
-    .query({'affiliate.trackingId': this.affiliateId})
+    .query({'affiliate.trackingId': this.trackingId})
     .query({'affiliate.networkId': this.networkId || defaultNetwork})
     .end(function (err, res) {
       if (err) return cb(err);
