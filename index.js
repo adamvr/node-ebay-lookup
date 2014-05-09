@@ -61,8 +61,8 @@ Ebay.prototype.country = function (country) {
   return this;
 };
 
-Ebay.prototype.affiliate = function (affiliateId) {
-  return this.affiliateId = affiliateId, this;
+Ebay.prototype.affiliate = function (id) {
+  return this.trackingId = id, this;
 };
 
 var networks = [
