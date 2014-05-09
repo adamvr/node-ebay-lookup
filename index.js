@@ -96,7 +96,7 @@ Ebay.prototype.done = function (cb) {
     .query({'OPERATION-NAME': 'findItemsAdvanced'})
     .query({'SERVICE-VERSION': '1.0.0'})
     .query({'SECURITY-APPNAME': this.id})
-    .query({'GLOBAL-ID': this.globalId})
+    .query({'GLOBAL-ID': this.globalId || defaultCountry})
     .query({'RESPONSE-DATA-FORMAT': 'XML'})
     .query({'REST-PAYLOAD': ''}) // Why, ebay? Why?
     .query({'paginationInput.entriesPerPage': 1})
