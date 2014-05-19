@@ -19,6 +19,8 @@ module.exports = function (itemId) {
 };
 
 var Ebay = function (itemId) {
+  this._filters = {};
+
   if ('object' === typeof itemId) {
     if (itemId.keywords) this.keywords = itemId.keywords, this.mode = 'search';
     if (itemId.itemId) this.itemId = itemId, this.mode = 'lookup';
