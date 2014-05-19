@@ -98,14 +98,16 @@ var listing = [
   { name: 'fixed', id: 'FixedPrice' },
   { name: 'all', id: 'All' }
 ];
-var defaultListing = 'All'
 Ebay.prototype.type = function (type) {
   var results = _.where(listing, {name: type.toLowerCase()});
 
-  // Set listing type
-  this.listingType = results.length ? results[0].id : null;
+  // Choke on invalid listing type
+  if (!results.length) throw new Error('Invalid listing type');
 
-  // Return this for chaining
+  // Add to filters
+  this._filters['ListingType'] = [results[0].id];
+
+  // Chain
   return this;
 };
 
