@@ -106,6 +106,11 @@ Ebay.prototype.type = function (type) {
   return this;
 };
 
+var defaultCondition = 'Unspecified';
+Ebay.prototype.condition = function (cond) {
+  return this._condition = capitalize(cond), this;
+};
+
 Ebay.prototype.done = function (cb) {
   return request
     .get(endpoint)
@@ -121,6 +126,8 @@ Ebay.prototype.done = function (cb) {
     .query({'affiliate.networkId': this.networkId || defaultNetwork})
     .query({'itemFilter(0).name': 'ListingType'})
     .query({'itemFilter(0).value(0)': this.listingType || defaultListing})
+    .query({'itemFilter(1).name': 'Condition'})
+    .query({'itemFilter(1).value(0)': this._condition || defaultCondition})
     .end(function (err, res) {
       if (err) return cb(err);
 
@@ -191,4 +198,8 @@ var parseResults = function (obj, extractions) {
     .value();
 
   return _.keys(res).length ? res : null;
+};
+
+var capitalize = function (str) {
+  return str.slice(0,1).toUpperCase() + str.slice(1)
 };
