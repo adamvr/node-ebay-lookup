@@ -128,8 +128,10 @@ Ebay.prototype.price = function (range) {
 };
 
 Ebay.prototype.done = function (cb) {
-  return request
-    .get(endpoint)
+  var r = request.get(endpoint);
+
+  // Add easy fields
+  r
     .query({'OPERATION-NAME': 'findItemsAdvanced'})
     .query({'SERVICE-VERSION': '1.0.0'})
     .query({'SECURITY-APPNAME': this.id})
@@ -139,25 +141,44 @@ Ebay.prototype.done = function (cb) {
     .query({'paginationInput.entriesPerPage': 1})
     .query({keywords: this.keywords})
     .query({'affiliate.trackingId': this.trackingId})
-    .query({'affiliate.networkId': this.networkId || defaultNetwork})
-    .query({'itemFilter(0).name': 'ListingType'})
-    .query({'itemFilter(0).value(0)': this.listingType || defaultListing})
-    .query({'itemFilter(1).name': 'Condition'})
-    .query({'itemFilter(1).value(0)': this._condition || defaultCondition})
-    .end(function (err, res) {
+    .query({'affiliate.networkId': this.networkId || defaultNetwork});
+
+  // Add filters
+  _
+    .chain(this._filters)
+    .pairs()
+    .map(map)
+    .flatten()
+    .each(r.query, r);
+
+  function map (x, i) {
+    var nameTemplate = 'itemFilter(%d).name=%s'
+      , valueTemplate = 'itemFilter(%d).value(%d)=%s';
+
+    // Holy shit what is that
+    return [
+      util.format(nameTemplate, i, x[0]),
+      _.map(x[1], function (y, j) {
+        return util.format(valueTemplate, i, j, y);
+      })
+    ];
+  }
+
+  // Run it
+  r.end(function (err, res) {
+    if (err) return cb(err);
+
+    return parse(res.text, function (err, p) {
+      // Parsing errors
       if (err) return cb(err);
 
-      return parse(res.text, function (err, p) {
-        // Parsing errors
-        if (err) return cb(err);
+      // API errors
+      if (err = parseErr(p)) return cb(err);
 
-        // API errors
-        if (err = parseErr(p)) return cb(err);
-
-        // Return result
-        return cb(null, parseResults(p, extractions));
-      });
+      // Return result
+      return cb(null, parseResults(p, extractions));
     });
+  });
 };
 
 var parseErr = function (obj) {
