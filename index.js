@@ -2,6 +2,7 @@
  * Module dependencies
  */
 var request = require('superagent')
+  , util = require('util')
   , _ = require('underscore')
   , path = require('JSONPath').eval
   , accounting = require('accounting')
