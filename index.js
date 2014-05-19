@@ -111,9 +111,20 @@ Ebay.prototype.type = function (type) {
   return this;
 };
 
-var defaultCondition = 'Unspecified';
 Ebay.prototype.condition = function (cond) {
-  return this._condition = capitalize(cond), this;
+  return this._filters['Condition'] = [capitalize(cond)], this;
+};
+
+Ebay.prototype.price = function (range) {
+  // Convert to array if necessary
+  range = _.isString(range) ? range.split('..') : range;
+
+  // Add limits to filters
+  if (range[0]) this._filters['MinPrice'] = [range[0]];
+  if (range[1]) this._filters['MaxPrice'] = [range[1]];
+
+  // Chain
+  return this;
 };
 
 Ebay.prototype.done = function (cb) {
