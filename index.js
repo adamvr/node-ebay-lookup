@@ -211,7 +211,7 @@ var extractions = [
   { name: 'name', query: '$..title[0]' },
   { name: 'url', query: '$..viewItemURL[0]' },
   { name: 'offerPrice',
-    query: '$..sellingStatus..currentPrice[0]',
+    query: '$..sellingStatus..convertedCurrentPrice[0]',
     transform: formatPrice
   },
   { name: 'listPrice',
