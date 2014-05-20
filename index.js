@@ -66,6 +66,12 @@ Ebay.prototype.country = function (country) {
   return this;
 };
 
+Ebay.prototype.location = function (country) {
+  this._filters['LocatedIn'] = [country];
+
+  return this;
+};
+
 Ebay.prototype.affiliate = function (id) {
   return this.trackingId = id, this;
 };
