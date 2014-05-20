@@ -133,6 +133,10 @@ Ebay.prototype.price = function (range) {
   return this;
 };
 
+Ebay.prototype.category = function (id) {
+  return this._categoryid = id, this;
+};
+
 Ebay.prototype.done = function (cb) {
   var r = request.get(endpoint);
 
@@ -147,7 +151,8 @@ Ebay.prototype.done = function (cb) {
     .query({'paginationInput.entriesPerPage': 1})
     .query({keywords: this.keywords})
     .query({'affiliate.trackingId': this.trackingId})
-    .query({'affiliate.networkId': this.networkId || defaultNetwork});
+    .query({'affiliate.networkId': this.networkId || defaultNetwork})
+    .query({'categoryId': this._categoryid});
 
   // Add filters
   _
