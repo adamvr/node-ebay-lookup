@@ -42,7 +42,7 @@ var countryId = [
   {countryCode: 'ES', globalId: 'EBAY-ES'},
   {countryCode: 'FR', globalId: 'EBAY-FR'},
   {countryCode: 'BE', globalId: 'EBAY-FRBE'},
-  {countryCode: 'UK', globalId: 'EBAY-GB'},
+  {countryCode: 'GB', globalId: 'EBAY-GB'},
   {countryCode: 'HK', globalId: 'EBAY-HK'},
   {countryCode: 'IE', globalId: 'EBAY-IE'},
   {countryCode: 'IN', globalId: 'EBAY-IN'},
