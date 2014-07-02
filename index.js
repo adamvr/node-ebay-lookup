@@ -62,6 +62,9 @@ Ebay.prototype.country = function (country) {
   // Set endpoint
   this.globalId = results.length ? results[0].globalId : null;
 
+  // Set country
+  this.country = country;
+
   // Return this for chaining
   return this;
 };
@@ -138,7 +141,8 @@ Ebay.prototype.category = function (id) {
 };
 
 Ebay.prototype.done = function (cb) {
-  var r = request.get(endpoint);
+  var r = request.get(endpoint)
+    , that = this;
 
   // Add easy fields
   r
@@ -187,7 +191,7 @@ Ebay.prototype.done = function (cb) {
       if (err = parseErr(p)) return cb(err);
 
       // Return result
-      return cb(null, parseResults(p, extractions));
+      return cb(null, parseResults.call(that, p, extractions));
     });
   });
 };
@@ -204,11 +208,18 @@ var first = function (obj, query) {
 
 var formatPrice = function (obj) {
   var amount = obj._
-    , code = obj.$ && obj.$.currencyId;
+    , code = obj.$ && obj.$.currencyId
+    , thousand, decimal;
 
   if (!amount || !currency) return null;
 
-  return accounting.formatMoney(amount, currency(code));
+  if (~['DE'].indexOf(this.country)) {
+    thousand = '.'; decimal = ',';
+  } else {
+    thousand = ','; decimal = '.';
+  }
+
+  return accounting.formatMoney(amount, currency(code), null, thousand, decimal);
 };
 
 var extractions = [
