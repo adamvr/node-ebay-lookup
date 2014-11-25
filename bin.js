@@ -23,11 +23,16 @@ var opts = nomnom
     abbr: 'a',
     help: 'Affiliate id'
   })
+  .option('country', {
+    abbr: 'c',
+    help: 'Country'
+  })
   .parse();
 
 ebay({keywords: opts.keywords})
   .id(opts.id)
   .affiliate(opts.affiliate)
+  .country(opts.country)
   .done(function (err, res) {
     if (err) throw err;
     console.log(JSON.stringify(res));
