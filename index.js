@@ -233,6 +233,10 @@ var extractions = [
   { name: 'listPrice',
     query: '$..discountPriceInfo..originalRetailPrice[0]',
     transform: formatPrice
+  },
+  {
+    name: 'eek',
+    query: '$..eekStatus[0]'
   }
 ];
 
