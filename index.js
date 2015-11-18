@@ -14,6 +14,24 @@ var request = require('superagent')
  */
 var endpoint = 'http://svcs.ebay.com/services/search/FindingService/v1';
 
+var extractions = [
+  { name: 'id', query: '$..itemId[0]' },
+  { name: 'name', query: '$..title[0]' },
+  { name: 'url', query: '$..viewItemURL[0]' },
+  { name: 'offerPrice',
+    query: '$..sellingStatus..convertedCurrentPrice[0]',
+    transform: formatPrice
+  },
+  { name: 'listPrice',
+    query: '$..discountPriceInfo..originalRetailPrice[0]',
+    transform: formatPrice
+  },
+  {
+    name: 'eek',
+    query: '$..eekStatus[0]'
+  }
+];
+
 module.exports = function (itemId) {
   return new Ebay(itemId);
 };
@@ -140,6 +158,11 @@ Ebay.prototype.category = function (id) {
   return this._categoryid = id, this;
 };
 
+Ebay.addExtractionRule = function (rule) {
+  extractions.push(rule);
+  return this;
+};
+
 Ebay.prototype.done = function (cb) {
   var r = request.get(endpoint)
     , that = this;
@@ -221,24 +244,6 @@ var formatPrice = function (obj) {
 
   return accounting.formatMoney(amount, currency(code), null, thousand, decimal);
 };
-
-var extractions = [
-  { name: 'id', query: '$..itemId[0]' },
-  { name: 'name', query: '$..title[0]' },
-  { name: 'url', query: '$..viewItemURL[0]' },
-  { name: 'offerPrice',
-    query: '$..sellingStatus..convertedCurrentPrice[0]',
-    transform: formatPrice
-  },
-  { name: 'listPrice',
-    query: '$..discountPriceInfo..originalRetailPrice[0]',
-    transform: formatPrice
-  },
-  {
-    name: 'eek',
-    query: '$..eekStatus[0]'
-  }
-];
 
 var parseResults = function (obj, extractions) {
   var that = this;
