@@ -158,7 +158,7 @@ Ebay.prototype.category = function (id) {
   return this._categoryid = id, this;
 };
 
-Ebay.addExtractionRule = function (rule) {
+Ebay.prototype.addExtractionRule = function (rule) {
   extractions.push(rule);
   return this;
 };
