@@ -1,6 +1,6 @@
 {
   "name": "ebay-lookup",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "A simple wrapper around the ebay product lookup api",
   "main": "index.js",
   "scripts": {
