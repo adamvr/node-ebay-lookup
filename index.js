@@ -45,6 +45,19 @@ var extractions = [
   {
     name: 'eek',
     query: '$..eekStatus[0]'
+  },
+  {
+    name: 'buyItNowAvailable',
+    query: '$..listingInfo..buyItNowAvailable[0]'
+  },
+  {
+    name: 'buyItNowPrice',
+    query: '$..listingInfo..convertedBuyItNowPrice[0]',
+    transform: formatPrice
+  },
+  {
+    name: 'endTime',
+    query: '$..listingInfo..endTime[0]'
   }
 ];
 
