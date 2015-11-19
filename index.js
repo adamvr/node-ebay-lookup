@@ -30,6 +30,10 @@ var formatPrice = function (obj) {
   return accounting.formatMoney(amount, currency(code), null, thousand, decimal);
 };
 
+var toBoolean = function (obj) {
+  return (obj === 'true');
+};
+
 var extractions = [
   { name: 'id', query: '$..itemId[0]' },
   { name: 'name', query: '$..title[0]' },
@@ -48,7 +52,8 @@ var extractions = [
   },
   {
     name: 'buyItNowAvailable',
-    query: '$..listingInfo..buyItNowAvailable[0]'
+    query: '$..listingInfo..buyItNowAvailable[0]',
+    transform: toBoolean
   },
   {
     name: 'buyItNowPrice',
