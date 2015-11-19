@@ -14,6 +14,22 @@ var request = require('superagent')
  */
 var endpoint = 'http://svcs.ebay.com/services/search/FindingService/v1';
 
+var formatPrice = function (obj) {
+  var amount = obj._
+    , code = obj.$ && obj.$.currencyId
+    , thousand, decimal;
+
+  if (!amount || !currency) return null;
+
+  if (~['DE'].indexOf(this.country)) {
+    thousand = '.'; decimal = ',';
+  } else {
+    thousand = ','; decimal = '.';
+  }
+
+  return accounting.formatMoney(amount, currency(code), null, thousand, decimal);
+};
+
 var extractions = [
   { name: 'id', query: '$..itemId[0]' },
   { name: 'name', query: '$..title[0]' },
@@ -231,22 +247,6 @@ var parseErr = function (obj) {
 var first = function (obj, query) {
   var result = path(obj, query);
   return result.length ? result[0] : null;
-};
-
-var formatPrice = function (obj) {
-  var amount = obj._
-    , code = obj.$ && obj.$.currencyId
-    , thousand, decimal;
-
-  if (!amount || !currency) return null;
-
-  if (~['DE'].indexOf(this.country)) {
-    thousand = '.'; decimal = ',';
-  } else {
-    thousand = ','; decimal = '.';
-  }
-
-  return accounting.formatMoney(amount, currency(code), null, thousand, decimal);
 };
 
 var parseResults = function (obj, extractions) {
