@@ -51,6 +51,10 @@ var extractions = [
     query: '$..eekStatus[0]'
   },
   {
+    name: 'listingType',
+    query: '$..listingInfo..listingType[0]'
+  },
+  {
     name: 'buyItNowAvailable',
     query: '$..listingInfo..buyItNowAvailable[0]',
     transform: toBoolean
