@@ -205,6 +205,14 @@ Ebay.prototype.addExtractionRule = function (rule) {
   return this;
 };
 
+Ebay.prototype.addFilter = function (filterName, filter) {
+  if (!this._filters[filterName]) {
+    this._filters[filterName] = [];
+  }
+  this._filters[filterName].push(filter);
+  return this;
+};
+
 Ebay.prototype.done = function (cb) {
   var r = request.get(endpoint)
     , that = this;
