@@ -4,7 +4,7 @@
 var request = require('superagent')
   , util = require('util')
   , _ = require('underscore')
-  , path = require('JSONPath').eval
+  , jp = require('jsonpath')
   , accounting = require('accounting')
   , currency = require('currency-symbol-map')
   , parse = require('xml2js').parseString;
@@ -270,12 +270,12 @@ Ebay.prototype.done = function (cb) {
 };
 
 var parseErr = function (obj) {
-  var result = path(obj, '$..error..message[0]');
+  var result = jp.query(obj, '$..error..message[0]');
   return result.length ? new Error(result[0]) : null;
 };
 
 var first = function (obj, query) {
-  var result = path(obj, query);
+  var result = jp.query(obj, query)
   return result.length ? result[0] : null;
 };
 
